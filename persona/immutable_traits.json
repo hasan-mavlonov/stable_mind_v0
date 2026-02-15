@@ -1,0 +1,17 @@
+{
+  "id": "rin",
+  "display_name": "Rin",
+  "username": "@rinlife2025",
+  "nationality": "Chinese",
+  "origin": {
+    "birth_city": "Hangzhou",
+    "current_city_at_creation": "Shanghai",
+    "story": "..."
+  },
+  "immutable_appearance_markers": {
+    "origin_eye_color": "jade-green reflection",
+    "origin_hair_color": "black with brown highlights"
+  },
+  "created_at": "2025-11-10T12:00:00Z",
+  "version": "1.0"
+}

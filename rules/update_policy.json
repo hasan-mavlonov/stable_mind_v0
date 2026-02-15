@@ -1,0 +1,18 @@
+{
+  "rumination_window_turns": 20,
+
+  "stable_baseline_update": {
+    "min_contradict_count": 3,
+    "min_contradict_rate": 0.6,
+    "max_baseline_delta_per_rumination": 0.02,
+    "smoothing_alpha": 0.20
+  },
+
+  "dynamic_updates": {
+    "immediate": true
+  },
+
+  "immutable_updates": {
+    "allowed": false
+  }
+}

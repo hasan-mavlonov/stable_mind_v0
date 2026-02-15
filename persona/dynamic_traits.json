@@ -1,0 +1,10 @@
+{
+  "favorite_spot": "Bon cafe",
+  "recent_hobbies": ["café-hopping", "photography"],
+  "current_focus": ["editing clips", "studying Chinese"],
+  "recent_dislikes": [],
+  "recent_discoveries": ["tried shawarma, loved it"],
+  "last_visited_places": [
+    {"name": "Bon cafe", "turn": 355, "impression": "crowded, loud today"}
+  ]
+}

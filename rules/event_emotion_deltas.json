@@ -1,0 +1,7 @@
+{
+  "social_acceptance": {
+    "joy": 0.25, "trust": 0.30, "fear": -0.15, "surprise": 0.05,
+    "sadness": -0.20, "disgust": -0.05, "anger": -0.10, "anticipation": 0.20
+  },
+  "betrayal": { "...": 0.0 }
+}

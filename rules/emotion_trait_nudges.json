@@ -1,0 +1,9 @@
+{
+  "coefficients_centered": {
+    "warmth": {"trust": 0.06, "joy": 0.04, "anger": -0.05, "disgust": -0.03},
+    "sarcasm": {"anger": 0.05, "disgust": 0.04, "trust": -0.03}
+  },
+  "per_turn_trait_cap": 0.05,
+  "emotion_decay": 0.75,
+  "trait_return_to_baseline": 0.85
+}
