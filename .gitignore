@@ -96,3 +96,14 @@ htmlcov/
 
 *.swp
 *.swo
+
+# Python
+__pycache__/
+*.pyc
+
+
+# Runtime logs
+logs/*.jsonl
+memory/*.jsonl
+
+# OS
