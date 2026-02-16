@@ -1,22 +1,171 @@
 {
-  "eligible_for_stable_belief_updates": [
-    "routine_disruption",
-    "negative_feedback",
-    "conflict",
-    "social_rejection"
-  ],
-  "event_types": [
-    "social_acceptance",
-    "social_rejection",
-    "betrayal",
-    "conflict",
-    "major_achievement",
-    "public_failure",
-    "chronic_stress_period",
-    "burnout_episode",
-    "major_relocation",
-    "routine_disruption",
-    "identity_challenge",
-    "feedback"
-  ]
+  "event_types": {
+    "social_acceptance": {
+      "keywords": [
+        "proud of you",
+        "good job",
+        "well done",
+        "love you",
+        "thank you",
+        "appreciate",
+        "congrats",
+        "respect",
+        "you’re amazing",
+        "you did great"
+      ]
+    },
+    "social_rejection": {
+      "keywords": [
+        "i hate you",
+        "leave me",
+        "go away",
+        "don't talk to me",
+        "nobody likes",
+        "rejected",
+        "shut up",
+        "i don't care",
+        "stop texting",
+        "you're annoying"
+      ]
+    },
+    "betrayal": {
+      "keywords": [
+        "betrayed",
+        "lied to me",
+        "you lied",
+        "backstab",
+        "cheated",
+        "broke my trust",
+        "two-faced",
+        "stabbed me in the back",
+        "you tricked me"
+      ]
+    },
+    "conflict": {
+      "keywords": [
+        "argue",
+        "argument",
+        "fight",
+        "shouting",
+        "conflict",
+        "disagree",
+        "tension",
+        "we fought",
+        "heated",
+        "confrontation"
+      ]
+    },
+    "major_achievement": {
+      "keywords": [
+        "i won",
+        "i got accepted",
+        "promotion",
+        "top score",
+        "ranked",
+        "award",
+        "scholarship",
+        "published",
+        "shipped",
+        "launched"
+      ]
+    },
+    "public_failure": {
+      "keywords": [
+        "i failed",
+        "humiliated",
+        "embarrassed",
+        "got rejected publicly",
+        "everyone laughed",
+        "i messed up",
+        "bombed",
+        "flopped"
+      ]
+    },
+    "chronic_stress_period": {
+      "keywords": [
+        "stressed for weeks",
+        "constant stress",
+        "nonstop stress",
+        "under pressure lately",
+        "overwhelmed lately",
+        "no break",
+        "can't catch a break"
+      ]
+    },
+    "burnout_episode": {
+      "keywords": [
+        "burned out",
+        "burnt out",
+        "exhausted",
+        "can't do this anymore",
+        "emotionally drained",
+        "no energy",
+        "burnout"
+      ]
+    },
+    "major_relocation": {
+      "keywords": [
+        "moved to",
+        "relocated",
+        "new city",
+        "new country",
+        "packed up",
+        "moved apartments",
+        "transfer to",
+        "immigrated"
+      ]
+    },
+    "routine_disruption": {
+      "keywords": [
+        "routine changed",
+        "schedule changed",
+        "couldn't sleep",
+        "sleep schedule ruined",
+        "missed my routine",
+        "everything changed",
+        "plans got disrupted"
+      ]
+    },
+    "identity_challenge": {
+      "keywords": [
+        "who am i",
+        "questioning myself",
+        "identity crisis",
+        "my worldview changed",
+        "everything i believed",
+        "i don't know what i want",
+        "existential"
+      ]
+    },
+    "feedback_positive": {
+      "keywords": [
+        "great feedback",
+        "they praised me",
+        "good feedback",
+        "my boss liked",
+        "teacher said i did well",
+        "complimented",
+        "positive feedback"
+      ]
+    },
+    "feedback_negative": {
+      "keywords": [
+        "bad feedback",
+        "they criticized",
+        "negative feedback",
+        "my boss hated",
+        "teacher said it's bad",
+        "complained about me",
+        "told me i was wrong"
+      ]
+    },
+    "feedback": {
+      "keywords": [
+        "feedback",
+        "review",
+        "critique",
+        "commented on my work"
+      ]
+    }
+  }
 }

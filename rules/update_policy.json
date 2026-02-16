@@ -1,17 +1,21 @@
 {
-  "rumination_window_turns": 20,
-
+  "rumination_window_size": 3,
+  "rumination_window_turns": 3,
+  "eligible_for_stable_belief_updates": [
+    "routine_disruption",
+    "feedback_negative",
+    "conflict",
+    "social_rejection"
+  ],
   "stable_baseline_update": {
     "min_contradict_count": 3,
     "min_contradict_rate": 0.6,
     "max_baseline_delta_per_rumination": 0.02,
-    "smoothing_alpha": 0.20
+    "smoothing_alpha": 0.2
   },
-
   "dynamic_updates": {
     "immediate": true
   },
-
   "immutable_updates": {
     "allowed": false
   }

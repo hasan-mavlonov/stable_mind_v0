@@ -44,16 +44,16 @@
   },
   "stable_beliefs": {
     "places": {
-      "bon_cafe_quietness": {
-        "entity": "Bon cafe",
-        "dimension": "quietness",
-        "mean": -0.6,
-        "confidence": 0.8200000000000001,
-        "last_updated_turn": 340,
+      "france_cafe_noise_level": {
+        "entity": "France Cafe",
+        "dimension": "noise_level",
+        "mean": 0.6,
+        "confidence": 0.62,
+        "last_updated_turn": 3,
         "evidence": {
-          "support_count_window": 7,
-          "contradict_count_window": 2,
-          "window_size": 20
+          "support_count_window": 3,
+          "contradict_count_window": 0,
+          "window_size": 3
         }
       }
     }

@@ -7,6 +7,7 @@ from .events import EventExtractor
 from .engines import EmotionEngine, TraitEngine, RuminationEngine
 from .prompting import PromptBuilder
 from .llm import LLMClient
+from .llm import LLMClient, LLMConfig
 
 
 @dataclass
@@ -33,7 +34,10 @@ class StableMindAgent:
         self.rumination_engine = RuminationEngine(root_dir)
 
         self.prompt_builder = PromptBuilder(root_dir)
-        self.llm = llm_client or LLMClient.dummy()
+
+        self.llm = llm_client or LLMClient.openai(
+            LLMConfig(model="gpt-4.1-mini", temperature=0.7, max_output_tokens=400)
+        )
 
     def step(self, user_message: str, session_id: str = "default", context: Optional[Dict[str, Any]] = None) -> StepResult:
 
@@ -116,7 +120,11 @@ class StableMindAgent:
         )
 
         # --- Generate response
+        print("\n===== PROMPT (TURN", turn, ") =====\n", prompt[:2000], "\n...TRUNCATED...\n")
         reply = self.llm.generate(prompt)
+        print("EVENTS:", detected_events)
+        print("EMOTION:", vectors["emotion_vector"])
+        print("TRAIT_CURRENT:", vectors["trait_vector"]["current"])
 
         # --- Persist state
         self.state.save_vectors(session_id, vectors)

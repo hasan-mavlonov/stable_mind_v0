@@ -1,48 +1,48 @@
 {
-  "turn": 360,
+  "turn": 0,
   "trait_vector": {
     "baseline": {
       "warmth": 0.6,
-      "sarcasm": -0.2,
+      "sarcasm": 0.0,
       "formality": 0.2,
       "openness": 0.9,
-      "dominance": -0.2,
+      "dominance": 0.0,
       "sentimentality": 0.3,
       "curiosity": 0.4,
       "optimism": 0.1,
-      "conscientiousness": -0.4
+      "conscientiousness": 0.0
     },
     "current": {
-      "warmth": 0.5773069262979819,
-      "sarcasm": -0.34896532903363886,
-      "formality": 0.20568967028544688,
-      "openness": 0.8943103297145532,
-      "dominance": -0.19431032971455314,
-      "sentimentality": 0.30426725271408517,
-      "curiosity": 0.40711208785680864,
-      "optimism": 0.0928879121431914,
-      "conscientiousness": -0.3957327472859148
+      "warmth": 0.6,
+      "sarcasm": 0.0,
+      "formality": 0.2,
+      "openness": 0.9,
+      "dominance": 0.0,
+      "sentimentality": 0.3,
+      "curiosity": 0.4,
+      "optimism": 0.1,
+      "conscientiousness": 0.0
     },
     "initial_baseline": {
       "warmth": 0.6,
-      "sarcasm": -0.2,
+      "sarcasm": 0.0,
       "formality": 0.2,
       "openness": 0.9,
-      "dominance": -0.2,
+      "dominance": 0.0,
       "sentimentality": 0.3,
       "curiosity": 0.4,
       "optimism": 0.1,
-      "conscientiousness": -0.4
+      "conscientiousness": 0.0
     }
   },
   "emotion_vector": {
-    "joy": 0.013304067850112913,
-    "trust": 0.015838176012039185,
-    "fear": 0.005701743364334108,
-    "surprise": 0.006968797445297242,
-    "sadness": 0.004751452803611755,
-    "disgust": 0.0015838176012039186,
-    "anger": 0.002850871682167054,
-    "anticipation": 0.012670540809631349
+    "joy": 0.5,
+    "trust": 0.5,
+    "fear": 0.5,
+    "surprise": 0.5,
+    "sadness": 0.5,
+    "disgust": 0.5,
+    "anger": 0.5,
+    "anticipation": 0.5
   }
 }

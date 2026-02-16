@@ -22,11 +22,32 @@ class StateStore:
 
     # ---- load rules
     def load_rules(self) -> Dict[str, Any]:
+        rules_dir = self.root / "rules"
+
+        event_emotion = self._read_json(rules_dir / "event_emotion_deltas.json")
+        emotion_trait_nudges = self._read_json(rules_dir / "emotion_trait_nudges.json")
+        update_policy = self._read_json(rules_dir / "update_policy.json")
+        taxonomy = self._read_json(rules_dir / "event_taxonomy.json")
+
+        # Some engines expect rules["emotion_trait"]["emotion_decay"] etc.
+        # But the nudges file also contains these parameters. We expose them in both places
+        # to keep compatibility and avoid KeyErrors.
+        emotion_trait = {
+            "emotion_decay": emotion_trait_nudges.get("emotion_decay", 0.75),
+            "trait_return_to_baseline": emotion_trait_nudges.get("trait_return_to_baseline", 0.85),
+            "per_turn_trait_cap": emotion_trait_nudges.get("per_turn_trait_cap", 0.05),
+        }
+
         return {
-            "event_emotion": self._read_json(self.root / "rules" / "event_emotion_deltas.json"),
-            "emotion_trait": self._read_json(self.root / "rules" / "emotion_trait_nudges.json"),
-            "update_policy": self._read_json(self.root / "rules" / "update_policy.json"),
-            "taxonomy": self._read_json(self.root / "rules" / "event_taxonomy.json"),
+            # canonical keys (what your engines should use)
+            "event_emotion": event_emotion,
+            "emotion_trait_nudges": emotion_trait_nudges,
+            "update_policy": update_policy,
+            "event_taxonomy": taxonomy,
+            "emotion_trait": emotion_trait,
+
+            # backwards-compatible aliases (in case some modules still use old names)
+            "taxonomy": taxonomy,
         }
 
     # ---- state per session (v0 single-file per session)

@@ -1,10 +1,13 @@
 from typing import Any, Dict, List
-import math
 
 
-def clamp(x: float, lo: float, hi: float) -> float:
+def clamp(x: float, lo: float = 0.0, hi: float = 1.0) -> float:
     return max(lo, min(hi, x))
 
+
+# =====================================================
+# Emotion Engine
+# =====================================================
 
 class EmotionEngine:
     def __init__(self, root_dir: str):
@@ -14,46 +17,66 @@ class EmotionEngine:
         deltas = rules["event_emotion"]
         decay = rules["emotion_trait"].get("emotion_decay", 0.75)
 
-        # decay first
-        emotion = {k: clamp(v * decay, 0.0, 1.0) for k, v in emotion.items()}
+        # decay toward neutral (0.5)
+        neutral = 0.5
+        emotion = {
+            k: clamp(neutral + (v - neutral) * decay)
+            for k, v in emotion.items()
+        }
 
-        # apply deltas
+        # apply event deltas
         for ev in events:
             if ev not in deltas:
                 continue
             for emo, d in deltas[ev].items():
-                emotion[emo] = clamp(emotion.get(emo, 0.0) + d, 0.0, 1.0)
+                emotion[emo] = clamp(emotion.get(emo, 0.5) + d)
 
         return emotion
 
+
+# =====================================================
+# Trait Engine
+# =====================================================
 
 class TraitEngine:
     def __init__(self, root_dir: str):
         pass
 
-    def apply_emotion_nudges(self, baseline: Dict[str, float], current: Dict[str, float], emotion: Dict[str, float], rules: Dict[str, Any]) -> Dict[str, float]:
-        cfg = rules["emotion_trait"]
-        coeffs = cfg["coefficients_centered"]
-        cap = cfg.get("per_turn_trait_cap", 0.05)
-        return_to_base = cfg.get("trait_return_to_baseline", 0.85)
-
-        # centered emotions
-        centered = {k: (emotion.get(k, 0.0) - 0.5) for k in emotion.keys()}
+    def apply_emotion_nudges(self, baseline, current, emotion, rules):
+        coeffs = rules["emotion_trait_nudges"]["coefficients_centered"]
+        per_turn_cap = rules["emotion_trait_nudges"]["per_turn_trait_cap"]
+        return_to_base = rules["emotion_trait_nudges"]["trait_return_to_baseline"]
 
         updated = dict(current)
-        for trait, emo_map in coeffs.items():
-            delta = 0.0
-            for emo, w in emo_map.items():
-                delta += w * centered.get(emo, 0.0)
-            delta = clamp(delta, -cap, cap)
-            updated[trait] = clamp(updated.get(trait, baseline.get(trait, 0.0)) + delta, -1.0, 1.0)
 
-        # return to baseline
-        for trait in updated.keys():
-            updated[trait] = baseline[trait] + (updated[trait] - baseline[trait]) * return_to_base
+        # Apply emotion-driven deltas
+        for trait, weights in coeffs.items():
+            if trait not in baseline or trait not in updated:
+                continue
+
+            delta = 0.0
+            for emo, w in weights.items():
+                delta += w * (emotion.get(emo, 0.5) - 0.5)
+
+            delta = clamp(delta, -per_turn_cap, per_turn_cap)
+
+            updated[trait] = clamp(updated[trait] + delta)
+
+        # Return slowly toward baseline
+        for trait in updated:
+            if trait not in baseline:
+                continue
+
+            updated[trait] = clamp(
+                baseline[trait] + (updated[trait] - baseline[trait]) * return_to_base
+            )
 
         return updated
 
+
+# =====================================================
+# Rumination Engine
+# =====================================================
 
 class RuminationEngine:
     def __init__(self, root_dir: str):
@@ -61,6 +84,7 @@ class RuminationEngine:
         self.root = Path(root_dir)
 
     def run(self, session_id: str, persona, vectors, rules, memory, turn: int):
+
         policy = rules["update_policy"]["stable_baseline_update"]
         window = rules["update_policy"]["rumination_window_turns"]
 
@@ -70,20 +94,70 @@ class RuminationEngine:
         belief_obs = memory.read_beliefs_window(session_id, start_turn, end_turn)
 
         stable = persona["stable"]
-        beliefs = stable.get("stable_beliefs", {}).get("places", {})
+        places = stable.setdefault("stable_beliefs", {}).setdefault("places", {})
 
         debug = {
             "updated_beliefs": [],
             "turn": turn
         }
 
-        for belief_key, belief in beliefs.items():
+        # -------------------------------------------------
+        # 1) CREATE NEW BELIEFS (if enough observations)
+        # -------------------------------------------------
+
+        groups = {}
+        for b in belief_obs:
+            entity = b.get("entity")
+            dimension = b.get("dimension")
+            if not entity or not dimension:
+                continue
+            groups.setdefault((entity, dimension), []).append(b)
+
+        MIN_OBS_TO_CREATE = 2
+
+        for (entity, dimension), obs_list in groups.items():
+            belief_key = f"{entity.lower().replace(' ', '_')}_{dimension}"
+
+            if belief_key in places:
+                continue
+
+            if len(obs_list) < MIN_OBS_TO_CREATE:
+                continue
+
+            values = [o["value"] for o in obs_list if "value" in o]
+            if not values:
+                continue
+
+            mean = sum(values) / len(values)
+
+            places[belief_key] = {
+                "entity": entity,
+                "dimension": dimension,
+                "mean": clamp(mean),
+                "confidence": 0.6,
+                "last_updated_turn": turn,
+                "evidence": {
+                    "support_count_window": len(values),
+                    "contradict_count_window": 0,
+                    "window_size": len(values)
+                }
+            }
+
+            debug["updated_beliefs"].append({
+                "belief": belief_key,
+                "created": True,
+                "new_mean": mean,
+                "obs_count": len(values)
+            })
+
+        # -------------------------------------------------
+        # 2) UPDATE EXISTING BELIEFS
+        # -------------------------------------------------
+
+        for belief_key, belief in places.items():
             entity = belief["entity"]
             dimension = belief["dimension"]
-            old_mean = belief["mean"]
-            old_conf = belief["confidence"]
 
-            # collect relevant observations
             relevant = [
                 b for b in belief_obs
                 if b.get("entity") == entity and b.get("dimension") == dimension
@@ -95,37 +169,24 @@ class RuminationEngine:
             values = [b["value"] for b in relevant]
             obs_mean = sum(values) / len(values)
 
-            # determine support vs contradict
-            support = 0
-            contradict = 0
+            old_mean = belief["mean"]
+            old_conf = belief["confidence"]
 
-            for v in values:
-                # same direction
-                if (old_mean <= 0 and v <= 0) or (old_mean > 0 and v > 0):
-                    support += 1
-                else:
-                    contradict += 1
+            # contradiction logic for [0,1] scale
+            contradict = sum(1 for v in values if abs(v - old_mean) > 0.3)
+            support = len(values) - contradict
 
-            total = len(values)
-            contradict_rate = contradict / total if total > 0 else 0
+            contradict_rate = contradict / len(values)
 
-            # Eligibility rule
             if (
                 contradict >= policy["min_contradict_count"]
-                and contradict > support
                 and contradict_rate >= policy["min_contradict_rate"]
             ):
                 alpha = policy["smoothing_alpha"]
-
                 new_mean = old_mean * (1 - alpha) + obs_mean * alpha
-                belief["mean"] = max(-1.0, min(1.0, new_mean))
 
-                # confidence update
-                belief["confidence"] = max(
-                    0.0,
-                    min(1.0, old_conf - 0.05)
-                )
-
+                belief["mean"] = clamp(new_mean)
+                belief["confidence"] = clamp(old_conf - 0.05)
                 belief["last_updated_turn"] = turn
 
                 debug["updated_beliefs"].append({
@@ -135,24 +196,24 @@ class RuminationEngine:
                     "contradict_count": contradict,
                     "support_count": support
                 })
-
             else:
-                # reinforce confidence slightly if stable
-                belief["confidence"] = min(1.0, old_conf + 0.02)
+                belief["confidence"] = clamp(old_conf + 0.02)
 
-        # ---- Drift metric (stable trait vector L2) ----
+        # -------------------------------------------------
+        # 3) DRIFT METRIC
+        # -------------------------------------------------
+
         baseline = vectors["trait_vector"]["baseline"]
-        if "initial_baseline" not in vectors["trait_vector"]:
-            vectors["trait_vector"]["initial_baseline"] = dict(baseline)
+        initial = vectors["trait_vector"].setdefault(
+            "initial_baseline",
+            dict(baseline)
+        )
 
-        initial = vectors["trait_vector"]["initial_baseline"]
+        drift_l2 = sum(
+            (baseline[k] - initial[k]) ** 2
+            for k in baseline
+        ) ** 0.5
 
-        drift_l2 = 0.0
-        for k in baseline:
-            drift_l2 += (baseline[k] - initial[k]) ** 2
-        drift_l2 = drift_l2 ** 0.5
-
-        # log drift
         self._append_drift_log({
             "turn": turn,
             "stable_trait_drift_L2": drift_l2,
@@ -162,8 +223,8 @@ class RuminationEngine:
         return debug
 
     def _append_drift_log(self, obj):
+        import json
         path = self.root / "logs" / "drift_metrics.jsonl"
         path.parent.mkdir(parents=True, exist_ok=True)
-        import json
         with path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(obj) + "\n")

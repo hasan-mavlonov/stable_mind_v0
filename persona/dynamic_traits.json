@@ -1,33 +1,13 @@
 {
-  "favorite_spot": "Bon cafe",
-  "recent_hobbies": [
-    "café-hopping",
-    "photography"
-  ],
-  "current_focus": [
-    "editing clips",
-    "studying Chinese"
-  ],
+  "favorite_spot": null,
+  "recent_hobbies": [],
+  "current_focus": [],
   "recent_dislikes": [],
   "recent_discoveries": [
-    "tried shawarma, loved it",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud.",
-    "Bon cafe was noisy/loud."
+    "France Cafe was noisy/loud.",
+    "France Cafe was noisy/loud.",
+    "France Cafe was quiet/calm."
   ],
-  "last_visited_places": [
-    {
-      "name": "Bon cafe",
-      "turn": 355,
-      "impression": "crowded, loud today"
-    }
-  ],
-  "last_entity_focus": "Bon cafe"
+  "last_visited_places": [],
+  "last_entity_focus": "France Cafe"
 }

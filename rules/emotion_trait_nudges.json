@@ -1,7 +1,105 @@
 {
   "coefficients_centered": {
-    "warmth": {"trust": 0.06, "joy": 0.04, "anger": -0.05, "disgust": -0.03},
-    "sarcasm": {"anger": 0.05, "disgust": 0.04, "trust": -0.03}
+    "warmth": {
+      "trust": 0.06,
+      "joy": 0.04,
+      "anger": -0.05,
+      "disgust": -0.03,
+      "fear": -0.02,
+      "sadness": -0.01,
+      "surprise": 0.0,
+      "anticipation": 0.0
+    },
+    "sarcasm": {
+      "anger": 0.05,
+      "disgust": 0.04,
+      "trust": -0.03,
+      "joy": -0.01,
+      "fear": 0.0,
+      "sadness": 0.0,
+      "surprise": 0.0,
+      "anticipation": 0.0
+    },
+    "patience": {
+      "anger": -0.06,
+      "fear": -0.02,
+      "sadness": -0.02,
+      "trust": 0.02,
+      "joy": 0.0,
+      "disgust": 0.0,
+      "surprise": 0.0,
+      "anticipation": 0.0
+    },
+    "assertiveness": {
+      "anger": 0.03,
+      "anticipation": 0.03,
+      "fear": -0.04,
+      "trust": 0.01,
+      "joy": 0.0,
+      "sadness": 0.0,
+      "disgust": 0.0,
+      "surprise": 0.0
+    },
+    "optimism": {
+      "joy": 0.06,
+      "anticipation": 0.05,
+      "sadness": -0.05,
+      "fear": -0.03,
+      "trust": 0.0,
+      "disgust": 0.0,
+      "anger": 0.0,
+      "surprise": 0.0
+    },
+    "empathy": {
+      "trust": 0.05,
+      "sadness": 0.02,
+      "disgust": -0.04,
+      "anger": -0.03,
+      "joy": 0.0,
+      "fear": 0.0,
+      "surprise": 0.0,
+      "anticipation": 0.0
+    },
+    "curiosity": {
+      "surprise": 0.05,
+      "anticipation": 0.04,
+      "fear": -0.03,
+      "joy": 0.0,
+      "trust": 0.0,
+      "sadness": 0.0,
+      "disgust": 0.0,
+      "anger": 0.0
+    },
+    "cautiousness": {
+      "fear": 0.06,
+      "anticipation": 0.02,
+      "surprise": 0.02,
+      "trust": -0.03,
+      "joy": 0.0,
+      "sadness": 0.0,
+      "disgust": 0.0,
+      "anger": 0.0
+    },
+    "mood_stability": {
+      "anger": -0.04,
+      "fear": -0.03,
+      "sadness": -0.04,
+      "surprise": -0.01,
+      "joy": 0.0,
+      "trust": 0.0,
+      "disgust": 0.0,
+      "anticipation": 0.0
+    },
+    "playfulness": {
+      "joy": 0.05,
+      "surprise": 0.04,
+      "sadness": -0.03,
+      "anger": -0.02,
+      "trust": 0.0,
+      "fear": 0.0,
+      "disgust": 0.0,
+      "anticipation": 0.0
+    }
   },
   "per_turn_trait_cap": 0.05,
   "emotion_decay": 0.75,

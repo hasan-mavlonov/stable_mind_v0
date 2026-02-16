@@ -1,0 +1,3 @@
+{"turn": 1, "entity": "France Cafe", "dimension": "noise_level", "value": 0.8, "evidence_text": "France cafe was loud and chaotic today"}
+{"turn": 2, "entity": "France Cafe", "dimension": "noise_level", "value": 0.8, "evidence_text": "France cafe was loud again"}
+{"turn": 3, "entity": "France Cafe", "dimension": "noise_level", "value": 0.2, "evidence_text": "France cafe is never quiet"}
