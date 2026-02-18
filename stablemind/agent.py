@@ -6,7 +6,6 @@ from .io_memory import MemoryStore
 from .events import EventExtractor
 from .engines import EmotionEngine, TraitEngine, RuminationEngine
 from .prompting import PromptBuilder
-from .llm import LLMClient
 from .llm import LLMClient, LLMConfig
 
 
@@ -35,9 +34,16 @@ class StableMindAgent:
 
         self.prompt_builder = PromptBuilder(root_dir)
 
-        self.llm = llm_client or LLMClient.openai(
-            LLMConfig(model="gpt-4.1-mini", temperature=0.7, max_output_tokens=400)
-        )
+        if llm_client is not None:
+            self.llm = llm_client
+        else:
+            try:
+                self.llm = LLMClient.openai(
+                    LLMConfig(model="gpt-4.1-mini", temperature=0.7, max_output_tokens=400)
+                )
+            except RuntimeError:
+                # Keep the agent usable in environments without OpenAI deps/API key.
+                self.llm = LLMClient.dummy()
 
     def step(self, user_message: str, session_id: str = "default", context: Optional[Dict[str, Any]] = None) -> StepResult:
 
