@@ -4,11 +4,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from dotenv import load_dotenv
-from openai import OpenAI
+try:
+    from dotenv import load_dotenv
+except ImportError:  # optional dependency for local .env loading
+    load_dotenv = None
+
+try:
+    from openai import OpenAI
+except ImportError:  # optional dependency; only needed for OpenAI-backed client
+    OpenAI = None
 
 
-load_dotenv()  # loads OPENAI_API_KEY from .env
+if load_dotenv is not None:
+    load_dotenv()  # loads OPENAI_API_KEY from .env
 
 
 @dataclass
@@ -40,6 +48,11 @@ class _DummyLLM(LLMClient):
 
 class OpenAILLMClient(LLMClient):
     def __init__(self, config: LLMConfig):
+        if OpenAI is None:
+            raise RuntimeError(
+                "openai package is not installed. Install with `pip install openai` "
+                "or pass a custom/dummy llm_client to StableMindAgent."
+            )
         self.config = config
         self.client = OpenAI()  # reads OPENAI_API_KEY
 

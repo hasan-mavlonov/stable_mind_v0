@@ -49,10 +49,11 @@ class EventExtractor:
         # --- 2) resolve focus entity ---
         focused_entity = None
 
-        # capture "<something> cafe"
-        m = re.search(r"\b([a-z0-9'’-]+(?:\s+[a-z0-9'’-]+)*)\s+cafe\b", text)
-        if m:
-            focused_entity = m.group(0).title()  # "France Cafe", "Bon Cafe", etc.
+        # capture "<something> cafe" with lightweight token parsing
+        tokens = re.findall(r"[a-z0-9'’-]+", text)
+        for i, tok in enumerate(tokens):
+            if tok == "cafe" and i > 0:
+                focused_entity = f"{tokens[i - 1]} cafe".title()
 
         # deixis fallback ("there", "it", "that place")
         if focused_entity is None:
